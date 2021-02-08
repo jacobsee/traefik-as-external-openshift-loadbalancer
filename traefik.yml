@@ -1,0 +1,15 @@
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  ocp-api:
+    address: ":6443"
+  ocp-bootstrap:
+    address: ":22623"
+
+providers:
+  file:
+    directory: "/configs"
+    watch: true
+

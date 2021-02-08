@@ -1,0 +1,49 @@
+tcp:
+  services:
+    ocp-api:
+      loadBalancer:
+        servers:
+          - address: 10.0.2.10:6443   # REMOVE ONLY THIS ADDRESS AFTER BOOTSTRAP STAGE
+          - address: 10.0.2.1:6443
+          - address: 10.0.2.2:6443
+          - address: 10.0.2.3:6443
+    ocp-bootstrap:                    # REMOVE THIS ENTIRE SECTION AFTER BOOTSTRAP STAGE
+      loadBalancer:
+        servers:
+          - address: 10.0.2.10:22623
+          - address: 10.0.2.1:22623
+          - address: 10.0.2.2:22623
+          - address: 10.0.2.3:22623
+    ocp-apps:
+      loadBalancer:
+        servers:
+          - address: 10.0.2.4:80
+          - address: 10.0.2.5:80
+          - address: 10.0.2.6:80
+    ocp-apps-tls:
+      loadBalancer:
+        servers:
+          - address: 10.0.2.4:443
+          - address: 10.0.2.5:443
+          - address: 10.0.2.6:443
+  routers:
+    ocp-api:
+      rule: "HostSNI(`*`)"
+      service: ocp-api
+      entryPoints:
+        - ocp-api
+    ocp-bootstrap:                    # REMOVE THIS ENTIRE SECTION AFTER BOOTSTRAP STAGE
+      rule: "HostSNI(`*`)"
+      service: ocp-bootstrap
+      entryPoints:
+        - ocp-bootstrap
+    ocp-apps:
+      rule: "HostSNI(`*`)"
+      service: ocp-apps
+      entryPoints:
+        - http
+    ocp-apps-tls:
+      rule: "HostSNI(`*`)"
+      service: ocp-apps-tls
+      entryPoints:
+        - https
